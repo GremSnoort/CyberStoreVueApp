@@ -14,7 +14,7 @@ npm run dev
 
 ## Backend
 
-Backend is written in `Go`, use `PostgreSQL` as a database
+Backend is written in `Go` and is using `PostgreSQL` as a database
 
 To run backend, do
 ```bash

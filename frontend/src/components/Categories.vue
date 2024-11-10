@@ -1,5 +1,33 @@
 <script setup>
 
+import { ref, watch } from 'vue'
+//import { useRoute } from 'vue-router'
+import { getCategories } from '../api.js'
+
+//const route = useRoute()
+
+const loading = ref(false)
+const post = ref(null)
+const error = ref(null)
+
+//watch(() => fetchData, { immediate: true })
+
+async function fetchData() {
+    error.value = post.value = null
+    loading.value = true
+
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! fetch Cats')
+  
+    try {
+        post.value = await getCategories()
+    } catch (err) {
+        error.value = err.toString()
+    } finally {
+        loading.value = false
+    }
+}
+
+fetchData()
 </script>
 
 <template>
@@ -11,13 +39,10 @@
             <img src="../assets/img/category/arrow_right.svg" style="padding-left: 32px;">
         </div>
     </div>
-    <div class="categories-cnt container-flex-row">
-        <div class="category-card"><router-link to="/api/category/2"><img src="../assets/img/category/phones.svg"><p>Phones</p></router-link></div>
-        <div class="category-card"><router-link to="/api/category/5"><img src="../assets/img/category/smartwatches.svg"><p>Smart Watches</p></router-link></div>
-        <div class="category-card"><router-link to="/api/category/2"><img src="../assets/img/category/cameras.svg"><p>Cameras</p></router-link></div>
-        <div class="category-card"><router-link to="/api/category/6"><img src="../assets/img/category/headphones.svg"><p>Headphones</p></router-link></div>
-        <div class="category-card"><router-link to="/api/category/3"><img src="../assets/img/category/computers.svg"><p>Computers</p></router-link></div>
-        <div class="category-card"><router-link to="/api/category/4"><img src="../assets/img/category/gaming.svg"><p>Gaming</p></router-link></div>
+    <div v-if="post" class="categories-cnt container-flex-row">
+        <div v-for="category in post" class="category-card">
+            <router-link :to="`/api/category/${category.id}`"><img :src="category.image" style="width: 50%;"><p>{{ category.displayName }}</p></router-link>
+        </div>
         <router-view></router-view>
     </div>
 </div>
@@ -55,7 +80,7 @@
     background: #EDEDED;
     width: 160px;
     height: 128px;
-    padding: 24px 52px 24px 52px;
+    padding-top: 1%;
     gap: 8px;
     border-radius: 5%;
     opacity: 0px;
@@ -66,6 +91,7 @@
     font-weight: 400;
     line-height: 24px;
     text-align: center;
+    align-items: center;
     margin-top: 8px;
     margin-bottom: 8px;
 }

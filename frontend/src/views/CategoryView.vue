@@ -2,7 +2,7 @@
 
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { getCategory, buildPath } from '../api.js'
+import { getCategory } from '../api.js'
 
 const route = useRoute()
 
@@ -67,9 +67,9 @@ export default {
                         <img src="../assets/img/products/fav.svg">
                     </div>
                     <div class="product-card-image">
-                        <img :src="buildPath(product.images[0])" style="width: 70%; ">
+                        <img :src="(product.image)" style="width: 50%; ">
                     </div>
-                    <p class="product-card-title">{{ product.name }}</p>
+                    <p class="product-card-title">{{ product.model }}</p>
                     <div class="product-card-price">${{product.price}}</div>
                 </router-link>
                 <button class="product-card-action" @click.native="addProductToCart(product)">Buy Now</button>

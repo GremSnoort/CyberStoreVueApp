@@ -36,9 +36,9 @@ watch(() => route.params.id, fetchData, { immediate: true })
 async function fetchData(id) {
     error.value = post.value = null
     loading.value = true
-  
+
     try {
-        post.value = await getProduct(id)  
+        post.value = await getProduct(id)
     } catch (err) {
         error.value = err.toString()
     } finally {
@@ -67,10 +67,10 @@ export default {
     <div v-if="post" class="container container-flex-column">
         <div class="product-intro container-flex-row">
             <div class="product-images">
-                <img :src="buildPath(post.images[0])">
+                <img :src="(post.image)">
             </div>
             <div class="product-info container-flex-column">
-                <div class="product-title">{{post.name}}</div>
+                <div class="product-title">{{post.model}}</div>
                 <div class="product-price container-flex-row"><p>${{post.discount_price ? post.discount_price : post.price}}</p><s>{{post.discount_price ? `$${post.price}` : ''}}</s></div>
                 <div class="product-specs container-flex-row">
                     <div v-for="characteristic in post.characteristics" class="product-spec container-flex-row">

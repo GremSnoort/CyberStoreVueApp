@@ -48,9 +48,9 @@ export default {
                 <h1>Shopping Cart</h1>
                 <div v-for="[index, product] in getProductsInCart" class="cart-item container-flex-row">
                     <router-link :to="`/api/product/${product.product.id}`">
-                    <img style="height: 128px" :src="buildPath(product.product.images[0])">
+                    <img style="height: 128px" :src="(product.product.image)">
                     </router-link>
-                    <div class="item-title">{{product.product.name}}</div>
+                    <div class="item-title">{{product.product.model}}</div>
                     <div class="item-counter container-flex-row">
                         <button class="count-down" @click.native="removeProductFromCart(product.product)"><img :src="minus"></button>
                         <input class="count-input" type="tel" :value="product.count"></input>

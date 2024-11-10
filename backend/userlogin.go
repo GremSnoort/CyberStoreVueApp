@@ -25,7 +25,6 @@ type UserLoginResponse struct {
 }
 
 func (r *UserLoginResponse) write(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
 	if bytes, err := json.Marshal(r); err != nil {
 		// @NOTE Should NEVER happen !!!
 		io.WriteString(w, fmt.Sprintf("{\"statusCode\":%d,\"message\":\"%s\",\"displayName\":\"%s\",\"accessToken\":\"%s\"}",
@@ -63,6 +62,9 @@ func UserLoginResponse_NotExists(username string) UserLoginResponse {
 
 func (h UserLoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("HTTP Request `UserLogin`")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	var resp UserLoginResponse
 	defer resp.write(w)

@@ -63,24 +63,23 @@ func (h UserCreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		resp = UserCreateResponse_Error(err)
 		return
 	}
-	if username, found := params[TableCustomers.fields.username]; found {
-		log.Println("UserCreate ", username)
-		if password, found := params[TableCustomers.fields.password]; found {
-			log.Println("UserCreate ", password) // @TODO !!! Encrypt Password !!!
 
-			var itemExists bool
-			if itemExists, err = h.dbconn.InsertCustomer(username[0], password[0]); err != nil {
-				resp = UserCreateResponse_Error(err)
+	username, unameFound := params[TableCustomers.fields.username]
+	password, paswdFound := params[TableCustomers.fields.password]
 
+	if unameFound && paswdFound {
+		var itemExists bool
+		if itemExists, err = h.dbconn.InsertCustomer(username[0], password[0]); err != nil {
+			resp = UserCreateResponse_Error(err)
+
+		} else {
+			if itemExists {
+				resp = UserCreateResponse_Exists()
 			} else {
-				if itemExists {
-					resp = UserCreateResponse_Exists()
-				} else {
-					resp = UserCreateResponse_Success()
-				}
+				resp = UserCreateResponse_Success()
 			}
-			return
 		}
+		return
 	}
 	resp = UserCreateResponse_Error(fmt.Errorf("Invalid Query"))
 }

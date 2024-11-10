@@ -1,4 +1,5 @@
 const endpoint = 'http://localhost:8090'
+const target_userlogin = '/user/login'
 const target_categories = '/categories' //'/api/category/'
 const target_category = '/category/list/' //'/api/category/'
 //const target_subcategory = '/api/subcategory/'
@@ -7,6 +8,17 @@ const target_products = '/product/get/' //'/api/products/'
 function buildPath(target) {
     let ep = endpoint
     return ep.concat('/', target)
+}
+
+async function userLogin(credentials) {
+    let ep = endpoint
+    const remote = ep.concat('', `${target_userlogin}?username=${credentials.email}&password=${credentials.password}`)
+    console.log(remote)
+    const requestOptions = {
+        method: "POST",
+    };
+    const response = await fetch(remote, requestOptions)
+    return response.json();
 }
 
 async function getCategories() {
@@ -31,4 +43,4 @@ async function getProduct(id) {
     return response.json();
 }
 
-export {buildPath, getCategories, getCategory, getProduct};
+export {buildPath, userLogin, getCategories, getCategory, getProduct};

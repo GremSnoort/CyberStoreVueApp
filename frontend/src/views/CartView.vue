@@ -1,12 +1,11 @@
 <script setup>
-import { buildPath } from '../api.js'
 import plus from '../assets/img/cart/plus.svg'
 import minus from '../assets/img/cart/minus.svg'
 </script>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { buildPath } from '../api.js'
+import { makeStruct, placeOrder } from '../api.js'
 
 export default {
   computed: {
@@ -23,6 +22,9 @@ export default {
     hasProduct() {
       return this.getProductsInCart.size > 0;
     },
+    countProducts() {
+      return this.getProductsInCart.size;
+    },
     addProductToCart(product) {
       this.addProduct(product);
     },
@@ -37,6 +39,32 @@ export default {
         this.getProductsInCart.forEach(logMapElements);
         return current
     },
+    async checkoutOrder(event) {
+        console.log(`checkoutOrder accessToken: '${window.localStorage.getItem('accessToken')}'' ${this.countProducts()}`)
+
+        if (this.hasProduct()) {
+            let prodList = []
+            const Item = new makeStruct('id, count');
+            for (let [i, product] of this.getProductsInCart) {
+                console.log(`${product.product.id} :: ${product.count}`)
+                prodList.push(new Item(product.product.id, product.count))
+            }
+            let strData = JSON.stringify(prodList)
+            console.log(strData)
+
+            const data = await placeOrder(strData, window.localStorage.getItem('accessToken'))
+            console.log(data)
+
+            if (data.statusCode === 0) {
+                // @TODO !!! Clear Cart !!!
+            } else {
+                alert("Authorization failed")
+                this.$router.push({
+                    path: `/login`
+                })
+            }
+        }
+    }
   },
 };
 </script>
@@ -62,7 +90,7 @@ export default {
             <div class="cart-summary container-flex-column">
                 <h2>Order Summary</h2>
                 <div class="cart-total container-flex-row"><p style="padding-right: 20%; padding-top: 1rem;">Total</p><p>${{totalPrice()}}</p></div>
-                <button class="cart-checkout">Checkout</button>
+                <button class="cart-checkout" @click="checkoutOrder">Checkout</button>
             </div>
         </div>
     </div>

@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/rs/cors"
+
 	_ "github.com/lib/pq"
 )
 
@@ -62,6 +64,10 @@ func main() {
 		dbconn: &dbconn,
 	}
 
+	orderPlaceHandler := OrderPlaceHandler{
+		dbconn: &dbconn,
+	}
+
 	mux := http.NewServeMux()
 	mux.Handle("/user/create", userCreateHandler)
 	mux.Handle("/user/login", userLoginHandler)
@@ -73,5 +79,16 @@ func main() {
 	mux.Handle("POST /product/add", productAddHandler)
 	mux.Handle("GET /product/get/{page}", productGetHandler)
 
-	http.ListenAndServe(":8090", mux)
+	mux.Handle("POST /order/place", orderPlaceHandler)
+
+	// https://pkg.go.dev/github.com/rs/cors#section-readme
+	handler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
+		AllowedMethods:   []string{"POST", "GET", "OPTIONS"},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	}).Handler(mux)
+	http.ListenAndServe(":8090", handler)
 }

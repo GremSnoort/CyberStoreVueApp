@@ -1,22 +1,15 @@
 <script setup>
 
-import { ref, watch } from 'vue'
-//import { useRoute } from 'vue-router'
+import { ref } from 'vue'
 import { getCategories } from '../api.js'
-
-//const route = useRoute()
 
 const loading = ref(false)
 const post = ref(null)
 const error = ref(null)
 
-//watch(() => fetchData, { immediate: true })
-
 async function fetchData() {
     error.value = post.value = null
     loading.value = true
-
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! fetch Cats')
   
     try {
         post.value = await getCategories()

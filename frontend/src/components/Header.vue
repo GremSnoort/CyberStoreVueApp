@@ -13,10 +13,13 @@
         </div>
         <div class="header-icons container-flex-row">
             <div class="header-icon">
-                <img src="../assets/img/header/favorites_vector.svg">
+                <img src="../assets/img/header/favorites_vector.svg" style="width: 50%;">
             </div>
             <div class="header-icon">
-                <router-link to="/cart"><img src="../assets/img/header/cart_vector.svg"></router-link>
+                <router-link to="/cart"><img src="../assets/img/header/cart_vector.svg" style="width: 50%;"></router-link>
+            </div>
+            <div class="header-icon">
+                <router-link to="/login"><img src="../assets/img/header/login-svgrepo-com.svg" style="width: 50%;"></router-link>
             </div>
         </div>
     </div>
@@ -29,6 +32,7 @@
 }
 .header-logo {
     align-self: center;
+    width: 25%;
 }
 .header-search {
     width: 30%;
@@ -58,8 +62,12 @@
     padding-left: 5%;
     align-self: center;
 }
+
+.header-icons {
+    width: 20%;
+}
 .header-icon {
-    padding-left: 1rem;
+    width: 30%;
     align-self: center;
 }
 </style>
